@@ -55,22 +55,16 @@ app.delete('/User/delete-user/:id' , async(req,res)=>{
     }
 })
 
-// app.update('/User/update-user/:id', async(req,res)=>{
+app.put('/User/update-user/:id', controller.updateUser);
+
+// app.put('/User/update-user/:id', async(req,res)=>{
 //     try{
-//         const editMode = req.query.edit;
-//         if(!editMode) {
-//             return res.redirect('/');
-//         }
 //         const userId = req.params.id;
-//         users.findById(userId)
-//         .then(user =>{
-//             if (!user) {
-//                 return res.redirect('/');
-//             }
-//         })
-//     }catch(err){
-//         console.log(err.message);
-//     }
+//         // res.json({message:"User updated successfully"});
+//         res.redirect(`/users/`+id);
+//         }catch(err){
+//             console.log(err.message);
+//         }
 // })
 
 User.sync({force:false})

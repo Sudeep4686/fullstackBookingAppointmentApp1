@@ -64,8 +64,28 @@
                         edit.type = "button",
                         edit.value = "edit"
                         edit.onclick = () =>{
-                            UserUpdate(data.id)
+                            updateUser(data.id)
                         }
+
+                        function updateUser(id){
+                            data.forEach(data=>{
+                                li.setAttribute('data-id',data.id);
+                            });
+                            const formData = document.getElementById('users');
+                            const UpdatedUser=formData.querySelector(`li[data-d="${id}"]`);
+                            fetch('/User/update-user/'+id,{
+                                method: 'PUT'
+                            })
+                            .then(response => response.json())
+                            .then(UpdatedUser=>{
+                                console.log(data.message);
+                                // const formData = document.getElementById('users');
+                                // const UpdatedUser = formData.querySelector(`li[${id}]`);
+                                location.reload();
+                            })
+                            .catch(err=>console.log(err.message));
+                        }
+
                         li.appendChild(delbtn)
                         li.appendChild(edit)
                         formData.appendChild(li)

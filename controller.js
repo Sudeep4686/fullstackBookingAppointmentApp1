@@ -25,26 +25,29 @@ async function insertData(req,res) {
     }
 }
 
-module.exports = {insertData};
+function updateUser(req,res) {
+    const userId = req.params.id;
+    User.findByPk(userId)
+    .then(User =>{
+        if(!User){
+            console.log("ID not found");
+            res.status(404).send("No ID found to update");
+        }else{
+            User.update({where:{id:userId}})
+            .then(updateUser=>{
+                console.log("updated user", updatedUser)
+                res.send(updatedUser);
+                console.log("user updated")
+            })
+            .catch(err=>{
+                res.status(500).send(err);
+            });
 
-// exports.deleteUser = (req,res,next) =>{
-//     const userId = req.params.id;
-//     User.destroy({where : {id:userId}})
-//         .then((result)=>{
-//             console.log("deleted the User");
-//             res.redirect('/');
-//         })
-//         .catch(err=> console.log(err));
-// }
+        }
+    })
+}
 
-// app.delete('/User/delete-user/:id' , async(req,res)=>{
-//     try{
-//     const uId = req.params.id;
-//     await User.destroy({where: {id:uId}});
-//     res.sendStatus(200);
-//     } catch(err){
-//         res.status(500).json({
-//             error:err,
-//         });
-//     }
-// })
+module.exports = {
+    insertData: insertData,
+    updateUser: updateUser
+};
