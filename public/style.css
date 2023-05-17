@@ -1,0 +1,78 @@
+body {
+    background-color: #edebc3;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  form {
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: #e9d2f7;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  form label {
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: auto;
+  }
+  
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="number"] {
+    width: 100%;
+    padding: auto;
+    margin-bottom: 5px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: none;
+    border: 1px solid #0f0c0c;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  form input[type="text"]:focus,
+  form input[type="email"]:focus,
+  form input[type="number"]:focus {
+    border: 1px solid #333;
+  }
+  
+  form input[type="submit"] {
+    display: block;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  ul {
+    list-style:none;
+    padding: 10px;
+    margin: 5px;
+  }
+  
+  ul li {
+    font-size: 20px;
+    padding: 10px;
+    background-color: #0d11e8;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  #users {
+    max-width: 500px;
+    margin: 20px auto;
+    color: darkblue;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+  }
+  
