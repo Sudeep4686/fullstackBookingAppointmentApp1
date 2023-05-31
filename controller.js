@@ -18,36 +18,33 @@ async function insertData(req,res) {
     try{
         const data = await User.create(obj)
         res.redirect('/');
-    
     }catch(error){
         res.status(500).send(error);
         console.log('could not send the data');
     }
 }
 
-function updateUser(req,res) {
-    const userId = req.params.id;
-    User.findByPk(userId)
-    .then(User =>{
-        if(!User){
-            console.log("ID not found");
-            res.status(404).send("No ID found to update");
-        }else{
-            User.update({where:{id:userId}})
-            .then(updateUser=>{
-                console.log("updated user", updatedUser)
-                res.send(updatedUser);
-                console.log("user updated")
-            })
-            .catch(err=>{
-                res.status(500).send(err);
-            });
-
+async function editUser(req,res){
+    try{
+        const {name,email,number} = req.body;
+        const user = await User.findByPk(req.params.id);
+        if (!user){
+            return res.status(404).send({message:'User not found'});
         }
-    })
+        user.name = name;
+        user.email = email;
+        user.number = number;
+        await user.save();
+
+        res.send({message:"User updated successfully",user});
+    }catch(error){
+        console.log(error);
+        res.status(500).send({message : "Error updating user in backend." });
+    }
+    
 }
 
 module.exports = {
     insertData: insertData,
-    updateUser: updateUser
+    editUser: editUser
 };

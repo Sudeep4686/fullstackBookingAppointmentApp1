@@ -2,13 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const controller = require('./controller');
+const axios = require('axios');
 
 const sequelize = require('./util/database');
 
 const User = require('./models/User');
 
 const app = express();
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -55,22 +55,7 @@ app.delete('/User/delete-user/:id' , async(req,res)=>{
     }
 })
 
-app.put('/User/update-user/:id', controller.updateUser);
+app.put('/users/editUser/:id', controller.editUser);
 
-// app.put('/User/update-user/:id', async(req,res)=>{
-//     try{
-//         const userId = req.params.id;
-//         // res.json({message:"User updated successfully"});
-//         res.redirect(`/users/`+id);
-//         }catch(err){
-//             console.log(err.message);
-//         }
-// })
+app.listen(3020);
 
-User.sync({force:false})
-.then(cb=>{
-    app.listen(3020);
-})
-.catch(err=>{
-    console.log(err.message);
-})

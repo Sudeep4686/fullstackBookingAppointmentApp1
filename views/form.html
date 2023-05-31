@@ -23,78 +23,81 @@
 
     </form>
     <div id="users"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+
     <script>
-        window.onload = function()
-        { 
-            fetch('/users')
-                .then(response => response.json())
-                .then(data =>{
-                    const formData = document.getElementById('users');
-                    formData.innerHTML='';
-                    data.forEach(data => {
-                        const li = document.createElement('li');
-                        li.textContent = `${data.name} - ${data.email} - ${data.number}`;
-                        formData.appendChild(li);
 
-                        const delbtn = document.createElement('input')
-                        delbtn.type = "button"
-                        delbtn.value = "delete"
-                        delbtn.onclick = () => {
-                            deleteUser(data.id)
-                        }
-                        
-                        function deleteUser(id){
-                            console.log("delete user with this id", id);
-                            fetch('/User/delete-user/'+id,{
-                                method: 'DELETE'
-                            })
-                            .then(response=>response.json())
-                            .then(data=>{
-                                console.log(data.message);
-                                const formData = document.getElementById('users');
-                                const deletedUser = formData.querySelector(`li[${id}]`);
-                                deletedUser.remove();
-                            })
-                            .catch(err=>{
-                                console.log(err.message); 
-                            });
-                        }
-
-                        const edit = document.createElement('input')
-                        edit.type = "button",
-                        edit.value = "edit"
-                        edit.onclick = () =>{
-                            updateUser(data.id)
-                        }
-
-                        function updateUser(id){
-                            data.forEach(data=>{
-                                li.setAttribute('data-id',data.id);
-                            });
+        window.onload = function(){
+                    fetch('/users')
+                        .then(response => response.json())
+                        .then(data => {
                             const formData = document.getElementById('users');
-                            const UpdatedUser=formData.querySelector(`li[data-d="${id}"]`);
-                            fetch('/User/update-user/'+id,{
-                                method: 'PUT'
-                            })
-                            .then(response => response.json())
-                            .then(UpdatedUser=>{
-                                console.log(data.message);
-                                // const formData = document.getElementById('users');
-                                // const UpdatedUser = formData.querySelector(`li[${id}]`);
-                                location.reload();
-                            })
-                            .catch(err=>console.log(err.message));
-                        }
+                            formData.innerHTML = '';
+                            data.forEach(user => {
+                                showOnScreen(user);
+                            });
+                        })
+                        .catch(err => {
+                            console.log('Error fetching user data:', err);
+                        });
+                }
 
-                        li.appendChild(delbtn)
-                        li.appendChild(edit)
-                        formData.appendChild(li)
-                    });
+                function showOnScreen(user) {
+                const usersList = document.getElementById('users');
+                const userId = `user-${user.id}`;
+                const li = document.createElement('li');
+                li.textContent = `${user.name} - ${user.email} - ${user.number}`;
+                usersList.appendChild(li);
+
+                const editBtn = document.createElement('input');
+                editBtn.type = 'button';
+                editBtn.value = 'edit';
+                editBtn.onclick = () => {
+                    const updatedName = prompt('Enter updated Name:', user.name);
+                    const updatedEmail = prompt('Enter updated Email:', user.email);
+                    const updatedNumber = prompt('Enter updated Number:', user.number);
+
+                    const updatedUser = {
+                        id : user.id,
+                        name : updatedName,
+                        email : updatedEmail,
+                        number : updatedNumber,
+                    };
+                    axios.put(`http://localhost:3020/users/editUser/${user.id}`, updatedUser)
+                    .then(response=>{
+                        console.log("Editing User : ", updatedUser);
+                        location.reload()
+                    })
+                    .catch(error =>{
+                        console.log("Error Editing User in frontend", error);
+                    })
+                };
+
+                const deleteBtn = document.createElement('input');
+                deleteBtn.type = 'button';
+                deleteBtn.value = 'delete';
+                deleteBtn.onclick = () => {
+                    console.log('Deleting user with ID:', user.id);
+                    fetch(`/User/delete-user/${user.id}`, {
+                    method: 'DELETE'
+                })
+                .then(response=>response.json())
+                .then(data=>{
+                    console.log(data.message);
+                    const formData = document.getElementById('users');
+                    const deletedUser = formData.querySelector(`li[id="${userId}"]`);
+                    deletedUser.remove();
                 })
                 .catch(err=>{
-                    console.log(err);
+                    console.log(err.message);
                 })
-        }
+                }
+
+                li.appendChild(editBtn);
+                li.appendChild(deleteBtn);
+                usersList.appendChild(li);
+            }
+
     </script>
      
 </body>
